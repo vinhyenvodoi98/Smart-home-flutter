@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/my_view.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -134,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
               )
             ]),
           ),
-          // Expanded(child:MyView())
+          Expanded(child: MyView())
         ],
       ),
     );
