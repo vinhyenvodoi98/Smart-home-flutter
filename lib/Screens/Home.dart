@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hello_world/Components/RaiseRadientButton.dart';
 import 'package:hello_world/Screens/SignInScreen.dart';
 import 'package:hello_world/custom_nav_bar.dart';
@@ -27,6 +26,32 @@ class _HomeState extends State<Home> {
           MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
           ModalRoute.withName('/SignIn'));
     }
+  }
+
+  Future<String> createRoom(BuildContext context) {
+    TextEditingController name = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Input Room Name"),
+            backgroundColor: Colors.blueGrey[50],
+            content: TextField(
+              controller: name,
+              decoration: InputDecoration(hintText: "Room"),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text("Submit"),
+                onPressed: () {
+                  Navigator.of(context).pop(name.text.toString());
+                },
+              )
+            ],
+          );
+        });
   }
 
   @override
@@ -117,13 +142,12 @@ class _HomeState extends State<Home> {
                             ],
                           ),
                           onPressed: () {
-                            // sharedPreferences.clear();
+                            sharedPreferences.clear();
                             Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
                                         SignInScreen()),
                                 ModalRoute.withName('/SignIn'));
-                            print('button clicked');
                           }),
                     ),
                   )
@@ -185,6 +209,7 @@ class _HomeState extends State<Home> {
             offset: Offset(0, 18),
             child: GestureDetector(
               onTap: () {
+                createRoom(context).then((value) => print(value));
                 print("nav tapped");
               },
               child: Container(
