@@ -12,12 +12,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Sign Up Screen ',
+      title: 'Smart Home',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      initialRoute: 'SignIn',
+      home: Home(),
+      initialRoute: 'Home',
       routes: {
         'SignIn': (context) => SignInScreen(),
         'SignUp': (context) => SignUpScreen(),

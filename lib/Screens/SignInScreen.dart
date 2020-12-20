@@ -142,6 +142,9 @@ class _SignInScreenState extends State<SignInScreen> {
           _isLoading = false;
         });
         sharedPreferences.setString("token", jsonResponse['token']);
+        sharedPreferences.setString("email", jsonResponse['user']['email']);
+        sharedPreferences.setString("name", jsonResponse['user']['name']);
+        sharedPreferences.setString("_id", jsonResponse['user']['_id']);
         Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (BuildContext context) => Home()),
             ModalRoute.withName('/Home'));

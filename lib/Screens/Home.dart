@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_world/Components/RaiseRadientButton.dart';
+import 'package:hello_world/Screens/SignInScreen.dart';
 import 'package:hello_world/custom_nav_bar.dart';
 import 'package:hello_world/my_view.dart';
+import "package:shared_preferences/shared_preferences.dart";
 
 class Home extends StatefulWidget {
   @override
@@ -9,6 +12,23 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  SharedPreferences sharedPreferences;
+  @override
+  void initState() {
+    super.initState();
+    checkLoginStatus();
+  }
+
+  checkLoginStatus() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    if (sharedPreferences.getString("token") == null ||
+        sharedPreferences.getString("name") == null) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
+          ModalRoute.withName('/SignIn'));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,6 +52,7 @@ class _HomeState extends State<Home> {
             Container(
               padding: EdgeInsets.only(left: 20),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Image.asset(
                     'assets/lightning.png',
@@ -74,6 +95,38 @@ class _HomeState extends State<Home> {
                       ],
                     ),
                   ),
+                  Container(
+                    width: 70,
+                    height: 29,
+                    child: Center(
+                      child: RaisedGradientButton(
+                          child: Text(
+                            'LOGOUT',
+                            style: TextStyle(
+                                fontFamily: "SF Rounded",
+                                fontWeight: FontWeight.bold,
+                                fontSize: 10,
+                                color: Colors.black),
+                          ),
+                          gradient: LinearGradient(
+                            begin: Alignment(0.01, 0.13),
+                            end: Alignment(0.97, 0.84),
+                            colors: <Color>[
+                              Color(0xff79fd7b),
+                              Color(0xff3dcd98)
+                            ],
+                          ),
+                          onPressed: () {
+                            // sharedPreferences.clear();
+                            Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        SignInScreen()),
+                                ModalRoute.withName('/SignIn'));
+                            print('button clicked');
+                          }),
+                    ),
+                  )
                 ],
               ),
             ),
@@ -89,12 +142,14 @@ class _HomeState extends State<Home> {
               child: Row(children: [
                 Image.asset('assets/profile_pic.png'),
                 Container(
-                  padding: EdgeInsets.only(left: 2, right: 15),
+                  padding: EdgeInsets.only(left: 2, right: 12),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Your name",
+                        sharedPreferences.getString("name") == null
+                            ? ""
+                            : sharedPreferences.getString("name"),
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: "SF Rounded",
@@ -119,24 +174,6 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                 ),
-                Container(
-                  width: 70,
-                  height: 29,
-                  decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                          begin: Alignment(0.01, 0.13),
-                          end: Alignment(0.97, 0.84),
-                          colors: [Color(0xff79fd7b), Color(0xff3dcd98)]),
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Center(
-                    child: Text("OWNER",
-                        style: TextStyle(
-                            fontFamily: "SF Rounded",
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
-                            color: Colors.black)),
-                  ),
-                )
               ]),
             ),
             Expanded(child: MyView())
@@ -165,9 +202,8 @@ class _HomeState extends State<Home> {
                           blurRadius: 18,
                           color: Color(0xff7afc79).withOpacity(0.26))
                     ]),
-                child: SvgPicture.asset(
-                  'assets/spark.svg',
-                  fit: BoxFit.scaleDown,
+                child: Image.asset(
+                  'assets/plus.png',
                 ),
               ),
             ),
