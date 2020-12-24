@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/Screens/Home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -128,11 +129,11 @@ class _SignInScreenState extends State<SignInScreen> {
   signIn(String email, pass) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     Map data = {'email': email, 'password': pass};
-    print(data);
     var jsonResponse;
+    print(data);
 
-    var response =
-        await http.post("http://192.168.1.10:3000/users/login", body: data);
+    var response = await http
+        .post("http://" + DotEnv().env['API_URL'] + "/users/login", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');

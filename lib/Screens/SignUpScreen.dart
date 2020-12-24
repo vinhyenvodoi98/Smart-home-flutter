@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hello_world/Screens/Home.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -147,8 +148,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     print(data);
     var jsonResponse;
 
-    var response =
-        await http.post("http://192.168.1.10:3000/users", body: data);
+    var response = await http
+        .post("http://" + DotEnv().env['API_URL'] + "/users", body: data);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       print('Response status: ${response.statusCode}');

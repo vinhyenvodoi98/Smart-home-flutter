@@ -20,7 +20,7 @@ class _HomeState extends State<Home> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("token") == null ||
+    if (sharedPreferences.getString("token") == null &&
         sharedPreferences.getString("name") == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
   }
 
   Future<String> createRoom(BuildContext context) {
-    TextEditingController name = TextEditingController();
+    TextEditingController roomName = TextEditingController();
 
     return showDialog(
         context: context,
@@ -38,7 +38,7 @@ class _HomeState extends State<Home> {
             title: Text("Input Room Name"),
             backgroundColor: Colors.blueGrey[50],
             content: TextField(
-              controller: name,
+              controller: roomName,
               decoration: InputDecoration(hintText: "Room"),
             ),
             actions: <Widget>[
@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
                 elevation: 5.0,
                 child: Text("Submit"),
                 onPressed: () {
-                  Navigator.of(context).pop(name.text.toString());
+                  Navigator.of(context).pop(roomName.text.toString());
                 },
               )
             ],
@@ -171,7 +171,7 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        sharedPreferences.getString("name") == null
+                        sharedPreferences == null
                             ? ""
                             : sharedPreferences.getString("name"),
                         style: TextStyle(
