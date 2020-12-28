@@ -62,7 +62,7 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 25),
+              padding: EdgeInsets.only(left: 25, top: 30),
               child: Text(
                 "Smart Home",
                 style: TextStyle(

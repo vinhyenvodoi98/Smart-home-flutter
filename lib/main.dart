@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hello_world/Screens/Home.dart';
+import 'package:hello_world/Screens/Room.dart';
 import 'package:hello_world/Screens/SignInScreen.dart';
 import 'package:hello_world/Screens/SignUpScreen.dart';
 
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         'SignIn': (context) => SignInScreen(),
         'SignUp': (context) => SignUpScreen(),
         'Home': (context) => Home(),
+        'Room': (context) => Room()
       },
     );
   }

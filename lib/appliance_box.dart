@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hello_world/Screens/Room.dart';
 
 class ApplianceBox extends StatefulWidget {
   String title;
@@ -21,9 +22,16 @@ class _ApplianceBoxState extends State<ApplianceBox> {
     //
     return GestureDetector(
         onTap: () {
-          setState(() {
-            isSelected = !isSelected;
-          });
+          // setState(() {
+          //   isSelected = !isSelected;
+          // });
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Room(title: widget.title),
+            ),
+          );
+          // Navigator.pushNamed(context, 'Room');
         },
         child: Container(
           decoration: BoxDecoration(
