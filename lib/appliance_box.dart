@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hello_world/Screens/Room.dart';
 
+//ignore: must_be_immutable
 class ApplianceBox extends StatefulWidget {
   String title;
   SvgPicture image;
@@ -22,16 +23,12 @@ class _ApplianceBoxState extends State<ApplianceBox> {
     //
     return GestureDetector(
         onTap: () {
-          // setState(() {
-          //   isSelected = !isSelected;
-          // });
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => Room(title: widget.title),
             ),
           );
-          // Navigator.pushNamed(context, 'Room');
         },
         child: Container(
           decoration: BoxDecoration(

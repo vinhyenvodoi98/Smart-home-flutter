@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world/Components/RoomDetails.dart';
 
+//ignore: must_be_immutable
 class Room extends StatefulWidget {
   String title;
   Room({this.title});
@@ -39,6 +41,8 @@ class _RoomState extends State<Room> {
                   ],
                 )),
           ),
+          SizedBox(height: 50),
+          Expanded(child: RoomDetails())
         ],
       ),
     );
