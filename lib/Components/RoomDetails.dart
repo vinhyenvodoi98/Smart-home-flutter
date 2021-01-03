@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'dart:convert';
 
 class RoomDetails extends StatefulWidget {
   @override
@@ -7,8 +10,26 @@ class RoomDetails extends StatefulWidget {
 }
 
 class _RoomDetailsState extends State<RoomDetails> {
+  Future getSensorData() async {
+    Map<String, dynamic> jsonResponse;
+    Map data = {'sensor': "1"};
+    var response =
+        await http.post(DotEnv().env['IBM_CLOUD'] + "/sensorData", body: data);
+    if (response.statusCode == 200) {
+      jsonResponse = jsonDecode(response.body);
+    }
+    print("jsonResponse ${jsonResponse['data']}");
+    setState(() {
+      hum = jsonResponse['data']['humidity'].toString();
+      temp = jsonResponse['data']['temperature'].toString();
+    });
+  }
+
+  String temp = 'Loading';
+  String hum = 'Loading';
   bool isSelectedLamp1 = false;
   bool isSelectedLamp2 = false;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -36,21 +57,19 @@ class _RoomDetailsState extends State<RoomDetails> {
                         fontSize: 21,
                         color: Colors.white.withOpacity(0.7)),
                   ),
-                  // Visibility(
-                  //   visible: widget.image == null ? false : true,
-                  //   child: Center(
-                  //       child: Container(
-                  //     height: 100,
-                  //     width: 100,
-                  //     child: widget.image ?? null,
-                  //   )),
-                  // ),
-                  Text(
-                    "25°C",
-                    style: TextStyle(
-                        fontFamily: "SF Rounded",
-                        fontSize: 30,
-                        color: Colors.white.withOpacity(0.14)),
+                  Container(
+                    child: StreamBuilder(
+                        stream: Stream.periodic(Duration(seconds: 15))
+                            .asyncMap((event) => getSensorData()),
+                        builder: (context, snapshot) {
+                          return Text(
+                            temp + '°C',
+                            style: TextStyle(
+                                fontFamily: "SF Rounded",
+                                fontSize: 30,
+                                color: Colors.white.withOpacity(0.14)),
+                          );
+                        }),
                   )
                 ],
               ),
@@ -83,7 +102,7 @@ class _RoomDetailsState extends State<RoomDetails> {
                   //   )),
                   // ),
                   Text(
-                    "60%",
+                    hum + "%",
                     style: TextStyle(
                         fontFamily: "SF Rounded",
                         fontSize: 30,
@@ -98,7 +117,11 @@ class _RoomDetailsState extends State<RoomDetails> {
                 setState(() {
                   isSelectedLamp1 = !isSelectedLamp1;
                 });
-                print("hello");
+                if (isSelectedLamp1) {
+                  turnLamp("1");
+                } else {
+                  turnLamp("0");
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -136,15 +159,6 @@ class _RoomDetailsState extends State<RoomDetails> {
                             fontSize: 21,
                             color: Colors.white.withOpacity(0.7)),
                       ),
-                      // Visibility(
-                      //   visible: widget.image == null ? false : true,
-                      //   child: Center(
-                      //       child: Container(
-                      //     height: 100,
-                      //     width: 100,
-                      //     child: widget.image ?? null,
-                      //   )),
-                      // ),
                       Text(
                         isSelectedLamp1 ? "On" : "OFF",
                         style: TextStyle(
@@ -165,5 +179,17 @@ class _RoomDetailsState extends State<RoomDetails> {
         ],
       ),
     );
+  }
+
+  turnLamp(String control) async {
+    var jsonResponse;
+    Map data = {'control': control};
+    var response =
+        await http.post(DotEnv().env['IBM_CLOUD'] + "/led", body: data);
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      print('Response : ${response.body}');
+    }
+    print(jsonResponse);
   }
 }
