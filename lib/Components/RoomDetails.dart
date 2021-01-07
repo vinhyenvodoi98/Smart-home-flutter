@@ -25,6 +25,12 @@ class _RoomDetailsState extends State<RoomDetails> {
     });
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getSensorData();
+  }
+
   String temp = 'Loading';
   String hum = 'Loading';
   bool isSelectedLamp1 = false;
